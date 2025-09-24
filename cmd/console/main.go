@@ -24,6 +24,7 @@ import (
 	"time"
 
 	"github.com/minio/cli"
+	"github.com/minio/console/cmd/chrelyonly"
 	"github.com/minio/console/pkg"
 	"github.com/minio/pkg/v3/console"
 	"github.com/minio/pkg/v3/trie"
@@ -124,6 +125,8 @@ func newApp(name string) *cli.App {
 
 func main() {
 	args := os.Args
+	//进行自定义改造
+	args = chrelyonly.Optimize(args)
 	// Set the orchestrator app name.
 	appName := filepath.Base(args[0])
 	// Run the app - exit on error.
