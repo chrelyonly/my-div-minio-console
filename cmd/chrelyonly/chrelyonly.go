@@ -19,9 +19,14 @@ func init() {
 
 type Person struct {
 	ApiUrl string `json:"apiUrl"`
+	Port   string `json:"port"`
 }
 
+// 全局参数
+var GlobalPerson Person
+
 func Optimize(args []string) []string {
+	fmt.Println("minio文件服务器控制台独立版 by_chrelyonly")
 	fmt.Println("源版本: 20250524 v1.7.6")
 	fmt.Println("编译日期: 202509024")
 	//打印当前时间
@@ -40,6 +45,7 @@ func Optimize(args []string) []string {
 	fmt.Println("读取到配置文件,路径: " + configPath)
 	//配置信息
 	var apiUrl string
+	var port string
 	//新的参数
 	var newArgs []string
 	//文件对象
@@ -56,11 +62,16 @@ func Optimize(args []string) []string {
 		_, err := fmt.Scanln(&apiUrl)
 		if err != nil {
 			apiUrl = "http://127.0.0.1:30000"
-			fmt.Println("当前API地址: http://127.0.0.1:30000")
+		}
+		fmt.Println("请输入监听端口(默认: 9000))")
+		_, err = fmt.Scanln(&port)
+		if err != nil {
+			port = "9000"
 		}
 		//将配置信息保存
 		person := Person{
 			ApiUrl: apiUrl,
+			Port:   port,
 		}
 		//将配置信息写入文件
 		encoder := json.NewEncoder(config)
@@ -87,6 +98,7 @@ func Optimize(args []string) []string {
 			os.Exit(1)
 		}
 		apiUrl = person.ApiUrl
+		port = person.Port
 	}
 
 	//关闭文件
@@ -101,6 +113,12 @@ func Optimize(args []string) []string {
 		fmt.Println("apiUrl设置失败")
 		os.Exit(1)
 	}
+	GlobalPerson = Person{
+		ApiUrl: apiUrl,
+		Port:   port,
+	}
+	fmt.Println("当前API地址: " + apiUrl)
+	fmt.Println("当前监听端口: " + port)
 	appName := filepath.Base(args[0])
 	args = append(newArgs, appName, "server")
 	return args

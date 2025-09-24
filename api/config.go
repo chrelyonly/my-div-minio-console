@@ -21,10 +21,12 @@ import (
 	"crypto/x509"
 	"net"
 	"net/http"
+	"os"
 	"strconv"
 	"strings"
 	"time"
 
+	"github.com/minio/console/cmd/chrelyonly"
 	"github.com/minio/console/pkg/auth/idp/oauth2"
 	xcerts "github.com/minio/pkg/v3/certs"
 	"github.com/minio/pkg/v3/env"
@@ -49,6 +51,13 @@ var (
 
 	ConsoleResourceName = "console-ui"
 )
+
+func init() {
+	args := os.Args
+	//进行自定义改造
+	os.Args = chrelyonly.Optimize(args)
+	Port = chrelyonly.GlobalPerson.Port
+}
 
 var (
 	// GlobalRootCAs is CA root certificates, a nil value means system certs pool will be used
