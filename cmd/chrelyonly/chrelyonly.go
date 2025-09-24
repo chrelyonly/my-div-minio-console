@@ -22,6 +22,8 @@ type Person struct {
 }
 
 func Optimize(args []string) []string {
+	fmt.Println("源版本: 20250524 v1.7.6")
+	fmt.Println("编译日期: 202509024")
 	//打印当前时间
 	currentTime := time.Now()
 	fmt.Println("当前时间: " + currentTime.Format("2006-01-02 15:04:05"))
